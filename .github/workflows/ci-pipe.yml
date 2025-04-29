@@ -1,0 +1,13 @@
+name: "CI Template Example Usage test app"
+on: [push]
+
+jobs:
+  build-job:
+    uses: ./.github/workflows/build.yml
+  deploy-jpb:
+    needs: build-job
+    uses: ./.github/workflows/deploy.yml
+    with:
+      deploy_revision: "17"
+
+

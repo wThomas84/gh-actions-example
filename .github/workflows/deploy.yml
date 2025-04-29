@@ -1,0 +1,16 @@
+on:
+  workflow_call:
+    inputs:
+      deploy_revision:
+        required: true
+        type: string
+
+jobs:
+  deploy-built-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: | 
+          echo "Hallo Deploy Revision= $INPUT_DEPLOY_REVISION"
+        env:
+          INPUT_DEPLOY_REVISION: ${{ inputs.deploy_revision }}

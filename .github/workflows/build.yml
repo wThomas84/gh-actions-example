@@ -1,0 +1,9 @@
+on:
+  workflow_call:
+
+jobs:
+  build-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - run: | 
+          echo "Hallo Build 🥳"
