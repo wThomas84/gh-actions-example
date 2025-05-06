@@ -1,9 +1,18 @@
 on:
   workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+
 
 jobs:
   build-artifact:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - run: | 
           echo "Hallo Build 🥳"
+          echo "Running build in env= "
+        env:
+          EXAMPLE_SECRET: "someSecret"

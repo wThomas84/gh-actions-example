@@ -1,13 +1,19 @@
 name: "CI Template Example Usage test app"
 on: [push]
 
+env:
+  REVISION: "Rev"
+
 jobs:
   build-job:
     uses: ./.github/workflows/build.yml
-  deploy-jpb:
+    with:
+      environment: "staging"
+
+  deploy-job:
     needs: build-job
     uses: ./.github/workflows/deploy.yml
     with:
-      deploy_revision: "17"
+      deploy_revision: "${{ env.REVISION }}"
 
 
