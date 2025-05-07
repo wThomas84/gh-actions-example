@@ -1,0 +1,45 @@
+name: "My Static Website Pipeline"
+on: [push]
+
+env:
+  APP_NAME: "my-cat-blog"
+  REVISION: "${{ github.run_id }}"
+
+jobs:
+  test_build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-image-uri: ${{ steps.provide-image-uri.outputs.artifact-image-uri }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Run Tests
+        run: echo "npm run test"
+      - name: Build
+        run: |
+            echo "npm run build"
+            mkdir dist
+            touch dist/crazy_build_$REVISION.txt
+            ls dist
+      - name: Upload Artifacts
+        id: upload-artifact
+        uses: ./.github/actions/upload-to-artifact-registry
+        with:
+          path-to-dockerfile: "dist/Dockerfile"
+          image-tag: ${{ env.APP_NAME }}:${{ env.REVISION }}
+      - name: Provide Image Uri
+        id: provide-image-uri
+        run: echo "artifact-image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+        env:
+          IMAGE_URI: ${{steps.upload-artifact.outputs.image-uri}}
+
+  deploy:
+    needs: test_build
+    runs-on: ubuntu-latest
+#    environment: ${{ inputs.environment }}
+    steps:
+      - name: Prepare deployment
+        run: echo "Going to deploy Image=$IMAGE_URI"
+        env:
+          IMAGE_URI: ${{ needs.test_build.outputs.artifact-image-uri }}

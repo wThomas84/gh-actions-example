@@ -1,0 +1,35 @@
+name: Build and Upload to container registry (mock)
+description: Build and Upload to container registry (mock)
+inputs:
+  path-to-dockerfile:
+    description: 'File Source'
+    required: true
+  image-tag:
+    description: 'Image Tag'
+    required: true
+
+outputs:
+    image-uri:
+      description: The fully qualified docker image uri, containing the registry uri and image tag
+      value: ${{ steps.upload.outputs.random-number }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build
+      run: |
+        echo "docker build -f $DOCKERFILE -t $TAG"
+      shell: bash
+      env:
+        DOCKERFILE: ${{ inputs.path-to-dockerfile }}
+        TAG: ${{ inputs.image-tag }}
+
+    - name: Upload
+      id: upload
+      run: |
+        echo "docker push $IMAGE_URI"
+        echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+      shell: bash
+      env:
+        TAG: ${{ inputs.image-tag }}
+        IMAGE_URI: my-container-registry/${{ inputs.image-tag }}

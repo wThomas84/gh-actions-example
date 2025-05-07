@@ -1,0 +1,22 @@
+name: Upload a file artifact
+description: Sets up a specific version of Node.js
+
+inputs:
+  source:
+    description: 'File Source'
+    required: true
+  destination:
+    description: 'File Destination'
+    required: true
+  ssh-key:
+    description: 'SHH Key'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Upload to webserver
+      run: echo "rsync $FILE_SRC $FILE_DEST"
+#      env:
+#        FILE_SRC: ${{ inputs.source }}
+#        FILE_DEST: ${{ inputs.destination }}

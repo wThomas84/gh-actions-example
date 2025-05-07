@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      environment:
+      revision:
         type: string
         required: true
 
@@ -9,10 +9,11 @@ on:
 jobs:
   build-artifact:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
-      - run: | 
-          echo "Hallo Build 🥳"
-          echo "Running build in env= "
+      - name: Run Lint Step
+        uses: ./.github/actions/lint-node-project
+      - name: Build Step
+        run: | 
+          echo "Hallo Build of revision=$REVISION 🥳"
         env:
-          EXAMPLE_SECRET: "someSecret"
+          REVISION: ${{ inputs.revision }}
