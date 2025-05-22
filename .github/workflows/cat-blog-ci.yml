@@ -24,31 +24,4 @@ jobs:
             ls dist
       - name: Upload Artifacts
         id: upload-artifact
-        uses: ./.github/actions/upload-to-artifact-registry
-        with:
-          path-to-dockerfile:  "dist/Dockerfile"
-          image-tag: ${{ env.APP_NAME }}:${{ env.REVISION }}
-        env:
-          MY_SECRET: ${{ secrets.exampleSecret }}
-      - name: Provide Image Uri
-        id: provide-image-uri
-        run: echo "artifact-image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
-        env:
-          IMAGE_URI: ${{steps.upload-artifact.outputs.image-uri}}
-
-  deploy:
-    needs: test_build
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image_uri: ${{ needs.test_build.outputs.artifact-image-uri }}
-
-
-  deploy-multi:
-    needs: [test_build]
-    strategy:
-      matrix:
-        environment: [ stage, prod ]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      image_uri: ${{ needs.test_build.outputs.artifact-image-uri }}
-      stage: ${{ matrix.environment }}
+        run: echo "🙀🙀🙀🙀🙀 cats messed up here"
