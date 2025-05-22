@@ -1,16 +1,31 @@
 on:
   workflow_call:
     inputs:
-      deploy_revision:
+      image_uri:
         required: true
         type: string
+      stage:
+        required: false
+        type: string
+        default: dev
+    outputs:
+       success:
+        value: "true"
 
 jobs:
   deploy-built-artifact:
+    environment: ${{ inputs.stage }}
     runs-on: ubuntu-latest
+    env:
+      IMAGE_URI: ${{ inputs.image_uri }}
+
     steps:
-      - name: Deploy
+      - name: Download Artifacts
         run: | 
-          echo "Hallo Deploy Revision= $INPUT_DEPLOY_REVISION"
+          echo "Downloading image IMAGE=$IMAGE_URI"
+      - name: Deploy files to destination
+        run: | 
+          echo "Hallo Deploy IMAGE=$IMAGE_URI on stage=$STAGE against s3=$S3_PATH"
         env:
-          INPUT_DEPLOY_REVISION: ${{ inputs.deploy_revision }}
+          STAGE: ${{ inputs.stage }}
+          S3_PATH: ${{ vars.S3_WEBSPACE_URL }}

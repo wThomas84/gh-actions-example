@@ -27,9 +27,10 @@ runs:
     - name: Upload
       id: upload
       run: |
-        echo "docker push $IMAGE_URI"
+        echo "docker push $IMAGE_URI with obfuscated example secret: $MY_SECRET"
         echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
       shell: bash
       env:
         TAG: ${{ inputs.image-tag }}
         IMAGE_URI: my-container-registry/${{ inputs.image-tag }}
+#        MY_SECRET: ${{ env.MY_SECRET }}

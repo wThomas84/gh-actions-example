@@ -17,6 +17,7 @@ runs:
   steps:
     - name: Upload to webserver
       run: echo "rsync $FILE_SRC $FILE_DEST"
-#      env:
-#        FILE_SRC: ${{ inputs.source }}
-#        FILE_DEST: ${{ inputs.destination }}
+      shell: bash
+      env:
+        FILE_SRC: ${{ inputs.source }}
+        FILE_DEST: ${{ inputs.destination }}
